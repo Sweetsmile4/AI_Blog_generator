@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Blog Posts</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Optional: Tailwind Typography for nicer blog previews -->
+    <link href="https://cdn.jsdelivr.net/npm/@tailwindcss/typography@0.5.9/dist/typography.min.css" rel="stylesheet">
+    <style>
+        /* Clamp preview text to ~3 lines */
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans antialiased">
+    
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white flex justify-between">
+        <div>
+            <h1 class="text-3xl font-bold">AI Blog Generator</h1>
+        </div>
+        <div>
+            <a href="#" class="text-white hover:underline mx-4">Welcome {{ user.username }}</a>
+            <a href="{% url 'blog-list' %}" class="text-white hover:underline mx-4">Saved Blog Posts</a>
+            <a href="{% url 'logout' %}" class="text-white hover:underline">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="container mx-auto mt-10 px-4 sm:px-0">
+        <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+
+            <!-- Blog posts section -->
+            <section>
+                <h2 class="text-xl mb-4 font-semibold">All Blog Posts</h2>
+                <div class="space-y-4">
+                    
+                    {% for article in blog_articles reversed %}
+                    <div class="border border-gray-300 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold mb-2">
+                            <a href="{% url 'blog-details' article.id %}" class="text-blue-600 hover:underline">
+                                {{ article.youtube_title }}
+                            </a>
+                        </h3>
+
+                        <!-- Blog preview with HTML + clamped to 3 lines -->
+                        <div class="prose max-w-none text-gray-700 line-clamp-3">
+                            {{ article.generated_content|safe }}
+                        </div>
+
+                        <!-- Read more link -->
+                        <div class="mt-2">
+                            <a href="{% url 'blog-details' article.id %}" class="text-blue-500 hover:underline text-sm">
+                                Read more →
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <footer class="text-center p-4 text-black mt-6">
+        &copy Powered by AI Blog Generator by <a href="#">Madhu</a>
+    </footer>
+</body>
+</html>
